@@ -1,4 +1,4 @@
-.PHONY: compose-build compose-up compose-log build-up migrate connect-db inspect-volume compose-down
+.PHONY: compose-build compose-up compose-log build-up migrate connect-db inspect-volume compose-down manage
 
 all:  build-up compose-log
 
@@ -10,7 +10,7 @@ compose-up:
 	docker-compose up -d
 
 compose-log:
-
+	docker-compose logs -f
 build-up:
 	docker-compose up -d --build
 
@@ -22,6 +22,12 @@ connect-db:
 
 inspect-volume:
 	docker volume inspect mymomentsproject_postgres_data
+
+manage:
+	docker-compose exec web python3 manage.py $(filter-out $@,$(MAKECMDGOALS))
+
+%:
+	@:
 
 compose-down:
 	docker-compose down -v
