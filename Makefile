@@ -1,33 +1,27 @@
-PP=POSTGRES_PASSWORD
-PU=POSTGRES_USER
+.PHONY: compose-build compose-up compose-log build-up migrate connect-db inspect-volume compose-down
 
-USER=qwerty
-PWSRD=password
-
-DBNAME=POSTGRES_DB
-NAME=postgres
-
-NET=network
-net=host
-
-DBCONTNAME=postgres
+all:  build-up compose-log
 
 
+compose-build:
+	docker-compose build
 
-.PHONY: docker_run docker_build all run_postgres run_server
+compose-up:
+	docker-compose up -d
 
-all: run_postgres docker_build docker_run
+compose-log:
 
-docker_run:
-	docker run -it --network=host -v "${PWD}:/project/" --env-file MyMoments/.env --rm webproject
+build-up:
+	docker-compose up -d --build
 
-run_server:
-	python3 MyMoments/manage.py runserver 0.0.0.0:8000
+migrate:
+	docker-compose exec web python3 manage.py migrate --noinput
 
-docker_build:
-	 docker build -t webproject .
+connect-db:
+	docker-compose exec db psql --username=hello_django --dbname=hello_django_dev
 
-run_postgres:
-	docker run --rm -e $(PP)=$(PWSRD) -d -e $(PU)=$(USER) -e $(DBNAME)=$(postgres) --$(NET)=$(net)  $(DBCONTNAME)
+inspect-volume:
+	docker volume inspect mymomentsproject_postgres_data
 
-
+compose-down:
+	docker-compose down -v
