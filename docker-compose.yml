@@ -2,9 +2,9 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 MyMomentsProject/MyMoments/manage.py runserver 0.0.0.0:8000
     volumes:
-      - "${PWD}:/project/"
+      - "${PWD}/..:/project/"
     ports:
       - "8000:8000"
     env_file:
