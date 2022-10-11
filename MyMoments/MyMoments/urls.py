@@ -16,11 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from Apps.Moments import moments_urls
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1', include(moments_urls))
+    path('api/v1', include('Moments.moments_urls'))
 ]
 
 # if settings.DEBUG:

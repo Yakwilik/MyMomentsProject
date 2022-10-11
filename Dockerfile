@@ -20,7 +20,9 @@ RUN pip3 install Pillow
 
 RUN pip3 install djangorestframework
 
+RUN pip install uwsgi
 RUN apt-get install make
+
 
 
 

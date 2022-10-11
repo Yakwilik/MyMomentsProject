@@ -17,6 +17,8 @@ class ProfileManager(models.Manager):
 class Rate(models.Model):
     rate = models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    def __str__(self):
+        return 'Rate of user {0}'.format(Profile.objects.filter(user__id=self.id).get(user__login=self.login))
 
 
 class Profile(models.Model):
