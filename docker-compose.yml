@@ -32,8 +32,8 @@ services:
       - "postgres_data:/var/lib/postgresql/data/"
     networks:
       - django-network
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+#    environment:
+#      - POSTGRES_HOST_AUTH_METHOD=trust
   webserver:
     build:
       context: .
