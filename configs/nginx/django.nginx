@@ -1,11 +1,8 @@
-events{
 
-}
-http {
     upstream django {
     # server unix:///path/to/your/mysite/mysite.sock; # взаимодействие с uwsgi через Unix-сокет (мы воспользуемся этим вариантом позже)
     server unix:///sock/django.sock; # взаимодействие с uwsgi через веб-порт
-}
+    }
 
     # конфигурация веб-сервера
     server {
@@ -40,4 +37,4 @@ http {
             include     uwsgi_params; # файл uwsgi_params, который мы только что взяли с github
         }
     }
-}
+

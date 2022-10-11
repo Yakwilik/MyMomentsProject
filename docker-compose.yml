@@ -1,17 +1,19 @@
 version: '3.7'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfiles/django.dockerfile
     command: bash -c "
       python MyMoments/manage.py wait_for_database
       &&
-      python MyMoments/manage.py makemigrations
+      python MyMoments/manage.py makemigrations --noinput
       &&
       python MyMoments/manage.py migrate  --noinput
       && 
       (python MyMoments/manage.py collectstatic --noinput)
       &&
-      uwsgi --ini MyMoments/uwsgi.ini"
+      uwsgi --ini /etc//uwsgi.ini"
     volumes:
       - "${PWD}/:/project/"
       - sock:/sock
@@ -31,11 +33,11 @@ services:
       - POSTGRES_PASSWORD=hello_django
       - POSTGRES_DB=hello_django_dev
   webserver:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: dockerfiles/nginx.dockerfile
     volumes:
       - "${PWD}/MyMoments/static/:/etc/nginx/static:ro"
-      - "${PWD}/MyMoments/uwsgi_params://etc/nginx/uwsgi_params:ro"
-      - "${PWD}/conf.nginx://etc/nginx/nginx.conf:ro"
       - sock:/sock
     ports:
       - "8080:8080"
