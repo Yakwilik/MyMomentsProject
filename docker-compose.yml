@@ -2,7 +2,7 @@ version: '3.7'
 services:
   web:
     build: .
-    command: uwsgi --http :8000 --chdir MyMoments/ --module MyMoments.wsgi
+    command: uwsgi --ini MyMoments/uwsgi.ini
     volumes:
       - "${PWD}/:/project/"
     ports:
