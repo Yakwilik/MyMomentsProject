@@ -1,7 +1,7 @@
 .PHONY: compose-build compose-up compose-log build-up migrate connect-db inspect-volume compose-down manage
 
 web=web
-all:  build-up migrate compose-log
+all:  build-up compose-log
 
 compose-build:
 	docker-compose build

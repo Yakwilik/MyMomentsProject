@@ -2,15 +2,24 @@ version: '3.7'
 services:
   web:
     build: .
-    command: uwsgi --ini MyMoments/uwsgi.ini
+    command: bash -c "
+      python MyMoments/manage.py wait_for_database
+      &&
+      python MyMoments/manage.py makemigrations
+      &&
+      python MyMoments/manage.py migrate  --noinput
+      && 
+      (python MyMoments/manage.py collectstatic --noinput)
+      &&
+      uwsgi --ini MyMoments/uwsgi.ini"
     volumes:
       - "${PWD}/:/project/"
-    ports:
-      - "8000:8000"
+      - sock:/sock
     env_file:
       - MyMoments/.env
     depends_on:
       - db
+
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -21,12 +30,19 @@ services:
       - POSTGRES_USER=hello_django
       - POSTGRES_PASSWORD=hello_django
       - POSTGRES_DB=hello_django_dev
-#  uwsgi:
-#    build: .
-#      context: .
-#      dockerfile: uwsgi.dockerfile
-
+  webserver:
+    image: nginx:alpine
+    volumes:
+      - "${PWD}/MyMoments/static/:/etc/nginx/static:ro"
+      - "${PWD}/MyMoments/uwsgi_params://etc/nginx/uwsgi_params:ro"
+      - "${PWD}/conf.nginx://etc/nginx/nginx.conf:ro"
+      - sock:/sock
+    ports:
+      - "8080:8080"
+    depends_on:
+      - web
 
 
 volumes:
     postgres_data:
+    sock:
