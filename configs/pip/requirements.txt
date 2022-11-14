@@ -1,6 +1,0 @@
-django
-postgres
-Pillow
-djangorestframework
-django-probes
-uwsgi

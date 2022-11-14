@@ -1,0 +1,7 @@
+django
+postgres
+Pillow
+djangorestframework
+django-probes
+uwsgi
+django-cors-headers
