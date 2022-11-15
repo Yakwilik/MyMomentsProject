@@ -5,11 +5,11 @@ interface HeadProps {
     title : string
 }
 
-const Head = ({title}: HeadProps) => {
+const Head = (props: HeadProps) => {
     return (
         <Helmet>
             <meta charSet="utf-8" />
-            <title>{title}</title>
+            <title>{props.title}</title>
             <link rel="canonical" href="http://mysite.com/example" />
         </Helmet>
     );

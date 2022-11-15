@@ -1,6 +1,6 @@
-import Header from "./header";
+import Header from "../header";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {privateRoutes, routes} from "../router/routes";
+import {privateRoutes, routes} from "../../router/routes";
 import React from "react";
 
 
@@ -11,6 +11,7 @@ const AppRouter = () => {
             <Routes>
                 {privateRoutes.map(route =>
                     <Route
+                        key={route.key}
                         path={route.path}
                         element={<route.component/>}
                         action={route.component}
@@ -18,6 +19,7 @@ const AppRouter = () => {
                 )}
                 {routes.map(route =>
                     <Route
+                        key={route.key}
                         path={route.path}
                         element={<route.component/>}
                     />

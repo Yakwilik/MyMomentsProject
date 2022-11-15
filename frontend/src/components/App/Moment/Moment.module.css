@@ -1,0 +1,17 @@
+.momentWrapper {
+    width: 80vh;
+    border: 1px solid teal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.imageSize {
+    max-height: 300px;
+}
+
+.titleStyle {
+    font-weight: bold;
+}

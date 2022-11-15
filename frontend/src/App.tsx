@@ -1,5 +1,5 @@
 import React from 'react';
-import AppRouter from "./components/appRouter";
+import AppRouter from "./components/App/appRouter";
 import Head from "./components/head";
 
 

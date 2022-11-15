@@ -1,4 +1,4 @@
-import getCookie from "../cookie/cookie";
+import getCookie from "../../cookie/cookie";
 const CSRFToken = () => {
     return (
         <input type="hidden" name="csrfmiddlewaretoken" value={getCookie('csrftoken')} />
