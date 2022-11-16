@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import classes from './Moment.module.css'
+import MyButton from "../../UI/button/MyButton";
 
 export interface IMoment {
     title: string,
@@ -7,10 +8,14 @@ export interface IMoment {
     image: string
     id: number
 }
-// export default IMoment;
-const Moment = (props: IMoment) => {
-    const [like, toggleLike] = useState(true)
 
+interface IMomentElement {
+    moment: IMoment
+    onSubmit?: ((callback: IMoment) => void)
+
+}
+const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
+    const [like, toggleLike] = useState(false)
     function Like() {
         if (like) {
             toggleLike(false)
@@ -27,8 +32,13 @@ const Moment = (props: IMoment) => {
                 />
                 <img src="logo512.png"  alt="" className={classes.imageSize}   />
             </picture>
-            <div className={classes.titleStyle}>{props.title}</div>
-            <div>{props.text}</div>
+            <div className={classes.titleStyle}>{}</div>
+            <div>{moment.title}</div>
+            <div>{moment.text}</div>
+            <div className={"ml-auto"}>
+                <MyButton onClick={()=>{onSubmit!(moment)}}>Удалить</MyButton>
+            </div>
+
             {like && <p>Like</p>}
         </div>
 

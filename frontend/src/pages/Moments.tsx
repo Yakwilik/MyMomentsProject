@@ -1,32 +1,44 @@
-import React, {useRef, useState} from "react";
-import Moment from "../components/App/Moment/Moment";
+import React, {useMemo, useRef, useState} from "react";
 import {IMoment} from "../components/App/Moment/Moment";
 import MomentList from "../components/App/MomentList/MomentList";
-import MyInput from "../components/UI/input/MyInput";
+import NewMomentForm from "../components/App/NewMomentForm/NewMomentForm";
+import MomentFilter ,{MomentFilterProps} from "../components/App/MomentFilter/MomentFilter";
+import MyModal from "../components/UI/MyModal/MyModal";
 import MyButton from "../components/UI/button/MyButton";
+import {useMoments} from "../hooks/useMoments";
+
 
 // interface Moments
 const Moments = () => {
-    const moments: IMoment[] = [
-        {title:"firstPost", text:"This is my first post", id:0, image:""},
-        {title:"secondPost", text:"This is my second post", id:1, image:""}
-    ]
+    const [moments, setMoments] = useState<IMoment[]>([
+        {title:"аа", text:"вв", id:0, image:""},
+        {title:"бб", text:"бб", id:1, image:""},
+        {title:"вв", text:"аа", id:2, image:""}
+    ])
 
-    const [title, setTitle] = useState(" ")
-    const bodyInputRef = useRef<HTMLInputElement>(null)
-    const addNewMoment = (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        console.log(bodyInputRef)
+
+    const [filter, setFilter] = useState<MomentFilterProps>({query: "", sort: ""})
+    const [modal, setModal] = useState(false)
+
+    const sortedAndSearchedMoments = useMoments(moments, filter.sort, filter.query )
+
+
+
+
+    const createMoment = (newMoment: IMoment) => {
+        setMoments([...moments, newMoment])
+        setModal(false)
     }
+    const deleteMoment = (moment: IMoment) => {
+        setMoments(moments.filter(p => p.id !== moment.id))
+    }
+
     return (
-        <div>
-            <MyInput type={"text"}
-                     label={"Cоздать новый момент"}
-                     onChange={event => setTitle(event.target.value)}
-                        ref={bodyInputRef}
-            />
-            <MyButton onClick={addNewMoment}>log</MyButton>
-            <MomentList moments={moments}></MomentList>
+        <div className={"min-w-[67%] flex-col justify-center"}>
+            <MyButton onClick={()=> setModal(true)}>Создать момент</MyButton>
+            <MyModal visible={modal} setModal={setModal}><NewMomentForm onSubmit={createMoment}/></MyModal>
+            <MomentFilter filter={filter} setFilter={setFilter}></MomentFilter>
+            <MomentList onSubmit={deleteMoment} moments={sortedAndSearchedMoments}></MomentList>
         </div>
     );
 };

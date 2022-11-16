@@ -1,4 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {MyFormData, RegistrationData} from "./dataTypes/registration";
 
 export const momentsApi = createApi({
     reducerPath: 'moments/api',
@@ -7,17 +8,14 @@ export const momentsApi = createApi({
         baseUrl: 'http://localhost:8080/'
     }),
     endpoints: build => ({
-        signUp: build.query<any, string>({
-            query: (search:string) => ({
-                url: 'api/v1/signup',
-                params: {
-                    login: search,
-                    password: search
-                },
-
+        signUp: build.mutation<any, FormData>({
+            query: (payload:MyFormData) => ({
+                url: 'api/v1/signup/',
+                method: "POST",
+                body: payload,
             }),
         })
     })
 })
 
-export const {useSignUpQuery} = momentsApi
+export const {useSignUpMutation} = momentsApi

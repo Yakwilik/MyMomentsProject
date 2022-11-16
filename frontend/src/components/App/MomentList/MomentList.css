@@ -1,0 +1,19 @@
+
+.moment-enter {
+    transform: translateX(-350px);
+    transition: all 500ms ease-in;
+}
+
+.moment-enter-active {
+    transform: translateX(0);
+    transition: all 500ms ease-in;
+}
+
+.moment-exit {
+    opacity: 1;
+}
+
+.moment-exit-active {
+    transform: translateX(350px);
+    transition: all 500ms ease-in;
+}

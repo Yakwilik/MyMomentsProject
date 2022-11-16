@@ -13,7 +13,6 @@ export interface InputProps extends inpProps {
 const MyInput = React.forwardRef<HTMLInputElement,InputProps>(({name, label, ...props}, ref: LegacyRef<HTMLInputElement> ) => {
     return (
         <div className={"input-wrapper"}>
-
             <label htmlFor={name}>{label}</label>
             <input ref={ref} id={name} {...props} className={classes.myInput}></input>
             <script>console.log({classes.myInput})</script>

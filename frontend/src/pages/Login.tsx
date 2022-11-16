@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSignUpQuery} from "../store/moments/momentsApi";
+// import {useSignUpQuery} from "../store/moments/momentsApi";
 import {Link} from "react-router-dom";
 import CSRFToken from "../components/App/CSRFToken";
 import MyInput from "../components/UI/input/MyInput";
