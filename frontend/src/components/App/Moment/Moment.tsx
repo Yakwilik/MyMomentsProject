@@ -1,18 +1,21 @@
 import React, {FC, useState} from 'react';
 import classes from './Moment.module.css'
 import MyButton from "../../UI/button/MyButton";
+import Comment, {ICommentProps} from "../Comment/Comment";
+import {CommentList} from "../CommentList/CommentList";
+import MyInput from "../../UI/input/MyInput";
 
 export interface IMoment {
     title: string,
     text: string,
     image: string
     id: number
+    comments: ICommentProps[]
 }
 
 interface IMomentElement {
     moment: IMoment
     onSubmit?: ((callback: IMoment) => void)
-
 }
 const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
     const [like, toggleLike] = useState(false)
@@ -21,6 +24,11 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
             toggleLike(false)
         } else {
             toggleLike(true)
+        }
+    }
+    function Comment( event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+            console.log('do validate');
         }
     }
     return (
@@ -40,6 +48,9 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
             </div>
 
             {like && <p>Like</p>}
+            <div className={"border w-[100%] border-black mt-[5px]"}></div>
+            <CommentList comments={moment.comments}></CommentList>
+            <MyInput type={"text"} onKeyDown={Comment} className={"w-[100%]"}></MyInput>
         </div>
 
     );

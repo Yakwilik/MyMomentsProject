@@ -8,11 +8,11 @@ interface NewMomentFormCallback {
 }
 
 const NewMomentForm: FC<NewMomentFormCallback> = ({onSubmit}) => {
-    const [moment, setMoment] = useState<IMoment>({id:2, title: "", image: " ", text: ""})
+    const [moment, setMoment] = useState<IMoment>({id:2, title: "", image: " ", text: "", comments:[]})
     const bodyInputRef = useRef<HTMLInputElement>(null)
     const addNewMoment = (event: React.SyntheticEvent) => {
         event.preventDefault()
-        setMoment({id: moment.id + 1, text: " ", image: " ", title: " "})
+        setMoment({id: moment.id + 1, text: " ", image: " ", title: " ", comments:[]})
         const newMoment: IMoment = moment
         onSubmit(newMoment)
     }

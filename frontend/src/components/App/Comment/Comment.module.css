@@ -1,0 +1,15 @@
+
+.CommentAuthor {
+    font-weight: bold;
+}
+
+.CommentText {
+    font-style: italic;
+}
+
+.Options {
+    cursor: pointer;
+}
+.Options:hover {
+    color: teal;
+}

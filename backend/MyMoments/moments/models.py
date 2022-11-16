@@ -26,7 +26,7 @@ class Rate(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, related_name='profile_related')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, related_name='profile')
     avatar = models.ImageField(blank=True, null=True, upload_to="avatar/%Y/%m/%d", default='default_acc.jpeg')
     created_date = models.DateTimeField(auto_now_add=True)
 
@@ -52,31 +52,44 @@ def author_directory_path(instance, filename):
                                              filename)
 
 
+class MomentManager(models.Manager):
+    pass
+
 class Moment(models.Model):
+    objects = MomentManager()
     title = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
 
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
     created_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to=author_directory_path)
     tags = models.ManyToManyField('Tag', 'tags')
 
-    #     TODO: unique_together
     def likes(self):
         return Like.objects.filter(moment__id=self.id).filter(moment__author__id=self.author.id).count()
 
+    def comments(self):
+        return Comment.objects.filter(moment__id=self.id).filter(moment__author__id=self.author.id)
+
+
+class Comment(models.Model):
+    objects = models.Manager()
+    text = models.CharField(max_length=255, blank=False)
+    moment = models.ForeignKey(Moment, on_delete=models.CASCADE)
+    comment_author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
     like_author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     moment = models.ForeignKey(Moment, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 #     TODO: unique_together
+    class Meta:
+        unique_together = [
+            ['moment', 'like_author']
+        ]
 
 
-class Comment(models.Model):
-    moment = models.ForeignKey(Moment, on_delete=models.CASCADE)
-    content = models.TextField(blank=False)
-    created_date = models.DateTimeField(auto_now_add=True)
 
 
 class Follower(models.Model):

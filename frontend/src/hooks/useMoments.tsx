@@ -2,7 +2,7 @@ import {useMemo} from 'react'
 import {IMoment} from "../components/App/Moment/Moment";
 
 export const useSortedMoments = (moments: IMoment[], sort: string) => {
-    type OmitID = Omit<IMoment, "id">;
+    type OmitID = Omit<IMoment, "id"|"comments">;
     type SortKey = keyof OmitID;
     const sortedMoments = useMemo(() => {
         if (sort) {

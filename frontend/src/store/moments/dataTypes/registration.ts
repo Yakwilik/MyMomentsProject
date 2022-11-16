@@ -30,7 +30,7 @@ export interface MyFormData extends FormData {
 }
 
 export function RegistrationData(values: RegistrationInputFormValues) {
-    var data = new FormData;
+    var data = new FormData();
     data.append(values.login.name, values.login.value)
     data.append(values.password.name, values.password.value)
     data.append(values.email?.name!, values.email?.value!)

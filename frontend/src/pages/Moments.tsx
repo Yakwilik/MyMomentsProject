@@ -11,9 +11,11 @@ import {useMoments} from "../hooks/useMoments";
 // interface Moments
 const Moments = () => {
     const [moments, setMoments] = useState<IMoment[]>([
-        {title:"аа", text:"вв", id:0, image:""},
-        {title:"бб", text:"бб", id:1, image:""},
-        {title:"вв", text:"аа", id:2, image:""}
+        {title:"аа", text:"вв", id:0, image:"", comments:[
+                {author:{username: "robot"}, text: "hellop"},
+                {author:{username: "khasbulat"}, text: "goodbye"}]},
+        {title:"бб", text:"бб", id:1, image:"", comments: []},
+        {title:"вв", text:"аа", id:2, image:"", comments:[]}
     ])
 
 
