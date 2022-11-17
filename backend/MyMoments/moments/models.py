@@ -1,28 +1,37 @@
 import django.contrib.auth.models
+from django.contrib import admin
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Count, Sum, Avg
 from datetime import datetime
 
+
 # Create your models here.
+
+
+def create_profile(username, email, password, **extra_fields):
+    user = User.objects.create_user(username=username, email=email, password=password, **extra_fields)
+    user.save()
+    profile = Profile(user=user)
+    profile.save()
 
 
 class ProfileManager(models.Manager):
     def get_top_users(self, count=6):
         return self.annotate(answers=Count('answers')).order_by('-answers')[:count]
 
-    def create_profile(self, username, email, password, **extra_fields):
-        user = User.objects.create_user(username=username, email=email, password=password, **extra_fields)
-        user.save()
-        profile = Profile(user=user)
-        profile.save()
 
 class Rate(models.Model):
+    objects = models.Manager()
     rate = models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
+
     def __str__(self):
-        return 'Rate of user {0}'.format(Profile.objects.filter(user__id=self.id).get(user__login=self.login))
+        return 'Rate of user {0}'.format(Profile.objects.filter(id=self.profile.id).get(user__username=self.profile.user.username))
 
 
 class Profile(models.Model):
@@ -33,7 +42,7 @@ class Profile(models.Model):
     followers = models.ManyToManyField('Follower', related_name='followers', blank=True, symmetrical=False)
     objects = ProfileManager()
 
-    def avergate_rate(self):
+    def average_rate(self):
         return Rate.objects.filter(profile__id=self.id).aggregate(Avg('rate'))
 
     def __str__(self):
@@ -55,6 +64,7 @@ def author_directory_path(instance, filename):
 class MomentManager(models.Manager):
     pass
 
+
 class Moment(models.Model):
     objects = MomentManager()
     title = models.CharField(max_length=255, blank=True)
@@ -63,13 +73,18 @@ class Moment(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
     created_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to=author_directory_path)
-    tags = models.ManyToManyField('Tag', 'tags')
 
-    def likes(self):
-        return Like.objects.filter(moment__id=self.id).filter(moment__author__id=self.author.id).count()
+    likes = GenericRelation('Like')
+
+    def __str__(self):
+        return f'{self.title} {self.content}'
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
     def comments(self):
-        return Comment.objects.filter(moment__id=self.id).filter(moment__author__id=self.author.id)
+        return Comment.objects.filter(moment__id=self.id)
 
 
 class Comment(models.Model):
@@ -79,23 +94,84 @@ class Comment(models.Model):
     comment_author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.text}'
+
+
 class Like(models.Model):
-    like_author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    moment = models.ForeignKey(Moment, on_delete=models.CASCADE)
+    liked_user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
     created_date = models.DateTimeField(auto_now_add=True)
-#     TODO: unique_together
+
+    def __str__(self):
+        return f'like to moment ' \
+               f'{Moment.objects.filter(id=self.object_id).first().id} by ' \
+               f'{Profile.objects.filter(id=self.liked_user.id).first()}'
+
     class Meta:
         unique_together = [
-            ['moment', 'like_author']
+            'object_id', 'liked_user'
         ]
-
-
+        verbose_name = "like"
+        verbose_name_plural = "likes"
 
 
 class Follower(models.Model):
-    follower = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    objects = models.Manager()
+    followed_user = models.ForeignKey(Profile, related_name='followed_user', on_delete=models.CASCADE)
+    follower = models.ForeignKey(Profile, related_name='follower', on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 
-class Tag(models.Model):
-    tag_name = models.CharField(max_length=254, unique=True)
+    def clean(self):
+        if self.followed_user == self.follower:
+            raise ValidationError("You can`t follow yourself")
 
+    def __str__(self):
+        return f'user {Profile.objects.filter(id=self.follower.id).first()} ' \
+               f'follows {Profile.objects.filter(id=self.followed_user.id).first()}'
+
+    class Meta:
+        unique_together = [
+            'followed_user', 'follower'
+        ]
+        verbose_name = "follower"
+        verbose_name_plural = "followers"
+
+
+def add_like(obj, user):
+    """Лайкает `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    like, is_created = Like.objects.get_or_create(
+        content_type=obj_type, object_id=obj.id, liked_user=user)
+    return like
+
+
+def remove_like(obj, user):
+    """Удаляет лайк с `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    Like.objects.filter(
+        content_type=obj_type, object_id=obj.id, liked_user=user
+    ).delete()
+
+
+def is_fan(obj, user) -> bool:
+    """Проверяет, лайкнул ли `user` `obj`.
+    """
+    if not user.is_authenticated:
+        return False
+    obj_type = ContentType.objects.get_for_model(obj)
+    likes = Like.objects.filter(
+        content_type=obj_type, object_id=obj.id, liked_user=user)
+    return likes.exists()
+
+
+def get_fans(obj):
+    """Получает всех пользователей, которые лайкнули `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    return User.objects.filter(
+        likes__content_type=obj_type, likes__object_id=obj.id)

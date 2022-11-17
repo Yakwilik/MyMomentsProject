@@ -17,7 +17,7 @@ export const CommentList = ({comments}:CommentListProps) => {
                 <CSSTransition
                     classNames={"moment"}
                     timeout={500}
-                    key={comment.author.username}
+                    key={[comment.text, Date.now()].join(" ")}
                 >
                     <Comment  author={comment.author} text={comment.text}/>
                 </CSSTransition>

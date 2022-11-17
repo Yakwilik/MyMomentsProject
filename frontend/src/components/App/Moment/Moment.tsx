@@ -16,8 +16,12 @@ export interface IMoment {
 interface IMomentElement {
     moment: IMoment
     onSubmit?: ((callback: IMoment) => void)
+    // setComment:
 }
 const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
+
+    // const [comments] = useMemo();
+    const [comments, setComments] = useState(moment.comments)
     const [like, toggleLike] = useState(false)
     function Like() {
         if (like) {
@@ -28,7 +32,12 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
     }
     function Comment( event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
-            console.log('do validate');
+            const newComment:  ICommentProps =
+                {
+                    author:{username: "user"},
+                    text: event.currentTarget.value
+                }
+            setComments([...comments, newComment])
         }
     }
     return (
@@ -49,7 +58,7 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
 
             {like && <p>Like</p>}
             <div className={"border w-[100%] border-black mt-[5px]"}></div>
-            <CommentList comments={moment.comments}></CommentList>
+            <CommentList comments={comments}></CommentList>
             <MyInput type={"text"} onKeyDown={Comment} className={"w-[100%]"}></MyInput>
         </div>
 

@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'moments', views.MomentViewSet)
-
+router.register(r'users', views.ProfileApiView)
 urlpatterns = [
 
     # path('ask/', views.ask, name="ask"),

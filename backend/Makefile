@@ -32,5 +32,8 @@ command:
 %:
 	@:
 
+-h:
+
+
 compose-down:
 	docker-compose down -v

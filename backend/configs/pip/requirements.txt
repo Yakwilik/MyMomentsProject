@@ -5,3 +5,4 @@ djangorestframework
 django-probes
 uwsgi
 django-cors-headers
+requests

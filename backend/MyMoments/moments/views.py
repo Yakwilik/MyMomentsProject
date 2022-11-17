@@ -20,7 +20,7 @@ from django.views.decorators.http import require_POST
 
 # Create your views here.
 
-class ProfileApiView(generics.ListAPIView):
+class ProfileApiView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
@@ -37,7 +37,7 @@ def registration(request: HttpRequest):
             'is_superuser': True
     }
     try:
-        Profile.objects.create_profile(**user)
+        create_profile(**user)
     except IntegrityError as e:
         content = {'status': 1, 'error': e.__str__()}
         return Response(data=content, status=status.HTTP_400_BAD_REQUEST)

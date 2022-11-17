@@ -6,12 +6,11 @@ from .models import Profile, Moment
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['followers_number', 'moments']
+        fields = "__all__"
 
 
 class MomentSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='profile', source='author', lookup_field='author')
     class Meta:
         model = Moment
-        fields = ['title', 'content', 'author', 'url']
+        fields = "__all__"
 
