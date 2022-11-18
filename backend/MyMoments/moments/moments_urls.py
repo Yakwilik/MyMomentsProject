@@ -5,7 +5,8 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'moments', views.MomentViewSet)
-router.register(r'users', views.ProfileApiView)
+router.register(r'profiles', views.ProfileApiView)
+router.register(r'users', views.UserApiView)
 router.register(r'rates', views.RateViewSet)
 router.register(r'comment', views.CommentViewSet)
 router.register(r'like', views.LikeViewSet)

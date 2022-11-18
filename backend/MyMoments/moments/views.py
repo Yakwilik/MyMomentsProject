@@ -1,5 +1,6 @@
 import http
 
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from rest_framework import generics, viewsets
@@ -13,13 +14,17 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import permissions
 
 from .models import Profile, Moment, Rate, create_profile, Comment, Like, Follower
-from .serializers import ProfileSerializer, MomentSerializer, RateSerializer, FollowersSerializer, LikeSerializer, \
-    CommentSerializer, ContentTypeSerializer
+from .serializers import *
 
 from django.views.decorators.http import require_POST
 
 
 # Create your views here.
+class UserApiView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class ProfileApiView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer

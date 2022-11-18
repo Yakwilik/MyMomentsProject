@@ -153,7 +153,7 @@ class Command(BaseCommand):
         self.COMMENTS_NEEDS = self.LIKES_NEEDS
         self.FOLLOWERS_NEEDS = self.USERS_NEEDS ** 2
 
-        # self.create_users_and_ref_profiles()
+        self.create_users_and_ref_profiles()
         profiles = Profile.objects.all()
         self.create_moments(profiles)
         moments = Moment.objects.all()

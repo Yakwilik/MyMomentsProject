@@ -9,7 +9,7 @@
 #        add_header Access-Control-Allow-Origin 'http://localhost:3000';
         add_header Referrer-Policy 'strict-origin-when-cross-origin';
         # порт, который будет слушать веб-сервер в ожидании запросов от пользователй
-        listen      8080;
+        listen      80;
         # доменное имя
         server_name     "0.0.0.0"; # замените на собственный домен или IP адрес
         charset     utf-8;
@@ -37,8 +37,9 @@
         #        TODO: proxy_pass
         # Остальные запросы перенаправляются в Django приложение
         location / {
-            uwsgi_pass  django;
-            include     uwsgi_params; # файл uwsgi_params, который мы только что взяли с github
+#            uwsgi_pass  django;
+            proxy_pass http://unix:/sock/django.sock;
+#            include     uwsgi_params; # файл uwsgi_params, который мы только что взяли с github
         }
     }
 
