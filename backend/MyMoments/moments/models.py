@@ -39,7 +39,6 @@ class Profile(models.Model):
     avatar = models.ImageField(blank=True, null=True, upload_to="avatar/%Y/%m/%d", default='default_acc.jpeg')
     created_date = models.DateTimeField(auto_now_add=True)
 
-    followers = models.ManyToManyField('Follower', related_name='followers', blank=True, symmetrical=False)
     objects = ProfileManager()
 
     def average_rate(self):

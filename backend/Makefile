@@ -32,7 +32,8 @@ command:
 %:
 	@:
 
--h:
+restart:
+	docker compose restart --timeout=1
 
 
 compose-down:

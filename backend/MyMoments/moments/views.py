@@ -1,28 +1,29 @@
 import http
 
+from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from rest_framework import generics, viewsets
 
 from django.http import HttpRequest
 from django.http import HttpResponse
-from rest_framework.decorators import renderer_classes, api_view
+from rest_framework.decorators import renderer_classes, api_view, action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework import permissions
 
-from .models import Profile, Moment
-from .serializers import ProfileSerializer, MomentSerializer
+from .models import Profile, Moment, Rate, create_profile, Comment, Like, Follower
+from .serializers import ProfileSerializer, MomentSerializer, RateSerializer, FollowersSerializer, LikeSerializer, \
+    CommentSerializer, ContentTypeSerializer
 
 from django.views.decorators.http import require_POST
 
 
-
 # Create your views here.
-
 class ProfileApiView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
 
 @require_POST
 @renderer_classes([JSONRenderer])
@@ -51,4 +52,43 @@ def registration(request: HttpRequest):
 class MomentViewSet(viewsets.ModelViewSet):
     queryset = Moment.objects.all()
     serializer_class = MomentSerializer
+    permission_classes = [permissions.AllowAny]
+
+    # moment
+    # comment_author
+    @action(methods=['get'], detail=True)
+    def comments(self, request, pk=None):
+        if pk is None:
+            return Response({'comments': [c.text for c in Comment.objects.all()]})
+        comms = Comment.objects.filter(moment__id=pk)
+        return Response({'comments': [{'text': c.text, 'author_id': c.comment_author.id, 'date': c.created_date} for c in comms]})
+
+
+class RateViewSet(viewsets.ModelViewSet):
+    queryset = Rate.objects.all()
+    serializer_class = RateSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class FollowerViewSet(viewsets.ModelViewSet):
+    queryset = Follower.objects.all()
+    serializer_class = FollowersSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class ContentTypeViewSet(viewsets.ModelViewSet):
+    queryset = ContentType.objects.all()
+    serializer_class = ContentTypeSerializer
     permission_classes = [permissions.AllowAny]

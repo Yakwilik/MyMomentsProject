@@ -6,6 +6,13 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'moments', views.MomentViewSet)
 router.register(r'users', views.ProfileApiView)
+router.register(r'rates', views.RateViewSet)
+router.register(r'comment', views.CommentViewSet)
+router.register(r'like', views.LikeViewSet)
+router.register(r'follower', views.FollowerViewSet)
+router.register(r'content-type', views.ContentTypeViewSet)
+
+
 urlpatterns = [
 
     # path('ask/', views.ask, name="ask"),
