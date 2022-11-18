@@ -9,7 +9,7 @@
 #        add_header Access-Control-Allow-Origin 'http://localhost:3000';
         add_header Referrer-Policy 'strict-origin-when-cross-origin';
         # порт, который будет слушать веб-сервер в ожидании запросов от пользователй
-        listen      80;
+        listen      8080;
         # доменное имя
         server_name     "0.0.0.0"; # замените на собственный домен или IP адрес
         charset     utf-8;

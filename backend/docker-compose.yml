@@ -43,7 +43,7 @@ services:
       - "${PWD}/MyMoments/media/:/etc/nginx/media:ro"
       - sock:/sock
     ports:
-      - "80:80"
+      - "8080:8080"
     depends_on:
       - web
     networks:
