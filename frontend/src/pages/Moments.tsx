@@ -1,46 +1,48 @@
 import React, {useMemo, useRef, useState} from "react";
-import {IMoment} from "../components/App/Moment/Moment";
+import {IMoment} from "../models/models";
 import MomentList from "../components/App/MomentList/MomentList";
 import NewMomentForm from "../components/App/NewMomentForm/NewMomentForm";
 import MomentFilter ,{MomentFilterProps} from "../components/App/MomentFilter/MomentFilter";
 import MyModal from "../components/UI/MyModal/MyModal";
 import MyButton from "../components/UI/button/MyButton";
 import {useMoments} from "../hooks/useMoments";
+import {useCommentsQuery, useMomentsQuery} from "../store/moments/momentsApi"
+import MomentsWithFilter from "../components/App/MomentsWithFilter/MomentsWithFilter";
 
 
 // interface Moments
 const Moments = () => {
-    const [moments, setMoments] = useState<IMoment[]>([
-        {title:"аа", text:"вв", id:0, image:"", comments:[
-                {author:{username: "robot"}, text: "hellop"},
-                {author:{username: "khasbulat"}, text: "goodbye"}]},
-        {title:"бб", text:"бб", id:1, image:"", comments: []},
-        {title:"вв", text:"аа", id:2, image:"", comments:[]}
-    ])
+    // const [moments, setMoments] = useState<IMoment[]>([
+    //     {title:"аа", content:"вв", id:0, image:"t", comments:[
+    //             {author:{username: "robot"}, text: "hellop"},
+    //             {author:{username: "khasbulat"}, text: "goodbye"}]},
+    //     {title:"бб", content:"бб", id:1, image:"e", comments: []},
+    //     {title:"вв", content:"аа", id:2, image:"q", comments:[]}
+    // ])
 
+    const {isLoading: momentsIsLoading, isError: momentsIsError, data: momentsData} = useMomentsQuery("")
 
-    const [filter, setFilter] = useState<MomentFilterProps>({query: "", sort: ""})
+    console.log(momentsData)
+
     const [modal, setModal] = useState(false)
 
-    const sortedAndSearchedMoments = useMoments(moments, filter.sort, filter.query )
-
-
-
-
     const createMoment = (newMoment: IMoment) => {
-        setMoments([...moments, newMoment])
+        // setMoments([...moments, newMoment])
         setModal(false)
     }
-    const deleteMoment = (moment: IMoment) => {
-        setMoments(moments.filter(p => p.id !== moment.id))
-    }
 
+    if (momentsIsError) {
+        return (
+            <div className={"text-center font-bold m-auto"}>
+                    Не удалось загрузить моменты
+            </div>)
+    }
     return (
         <div className={"min-w-[67%] flex-col justify-center"}>
             <MyButton onClick={()=> setModal(true)}>Создать момент</MyButton>
             <MyModal visible={modal} setModal={setModal}><NewMomentForm onSubmit={createMoment}/></MyModal>
-            <MomentFilter filter={filter} setFilter={setFilter}></MomentFilter>
-            <MomentList onSubmit={deleteMoment} moments={sortedAndSearchedMoments}></MomentList>
+            {momentsIsLoading && <p className="text-center">Loading...</p>}
+            {!momentsIsLoading && !momentsIsError && <MomentsWithFilter moments={momentsData!}></MomentsWithFilter>}
         </div>
     );
 };

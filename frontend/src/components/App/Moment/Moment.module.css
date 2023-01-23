@@ -15,3 +15,15 @@
 .titleStyle {
     font-weight: bold;
 }
+
+.liked_before:before {
+    background: url(../../../../public/Favorite.png) no-repeat;
+    content: "";
+    background-size: 20px 20px;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+}

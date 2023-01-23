@@ -1,17 +1,10 @@
 import React, {FC, useState} from 'react';
 import classes from './Moment.module.css'
 import MyButton from "../../UI/button/MyButton";
-import Comment, {ICommentProps} from "../Comment/Comment";
+import {ICommentProps, IMoment} from "../../../models/models";
 import {CommentList} from "../CommentList/CommentList";
 import MyInput from "../../UI/input/MyInput";
 
-export interface IMoment {
-    title: string,
-    text: string,
-    image: string
-    id: number
-    comments: ICommentProps[]
-}
 
 interface IMomentElement {
     moment: IMoment
@@ -19,7 +12,6 @@ interface IMomentElement {
     // setComment:
 }
 const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
-
     // const [comments] = useMemo();
     const [comments, setComments] = useState(moment.comments)
     const [like, toggleLike] = useState(false)
@@ -31,34 +23,45 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
         }
     }
     function Comment( event: React.KeyboardEvent<HTMLInputElement>) {
+        if (comments == null) {
+            return;
+        }
         if (event.key === 'Enter') {
             const newComment:  ICommentProps =
                 {
-                    author:{username: "user"},
+                    comment_author:{id: 1, avatar:""},
                     text: event.currentTarget.value
                 }
+                if (!newComment.text.length) {
+                    return
+                }
             setComments([...comments, newComment])
+            event.currentTarget.value = ""
         }
     }
     return (
         <div className={classes.momentWrapper}>
             <picture onDoubleClick={Like}>
                 <source className={classes.imageSize}
-                    srcSet="logo512.png"
+                    srcSet={moment.image}
                     type="image/webp"
                 />
-                <img src="logo512.png"  alt="" className={classes.imageSize}   />
+                <img src={moment.image}  alt={moment.content} className={classes.imageSize}   />
             </picture>
             <div className={classes.titleStyle}>{}</div>
-            <div>{moment.title}</div>
-            <div>{moment.text}</div>
+            <div className="font-bold text-center my-[10px]">{moment.title}</div>
+            <div className="my-[10px]">{moment.content}</div>
             <div className={"ml-auto"}>
-                <MyButton onClick={()=>{onSubmit!(moment)}}>Удалить</MyButton>
+                {moment.is_mine && <MyButton onClick={()=>{onSubmit!(moment)}}>Удалить</MyButton>}
             </div>
-
-            {like && <p>Like</p>}
+            <div>
+                <span className={classes.liked_before} onClick={()=> console.log("click")}>
+                    {moment.likes}
+                </span>
+            </div>
+            {moment.is_liked && <p>Like</p>}
             <div className={"border w-[100%] border-black mt-[5px]"}></div>
-            <CommentList comments={comments}></CommentList>
+            <CommentList comments={comments!}></CommentList>
             <MyInput type={"text"} onKeyDown={Comment} className={"w-[100%]"}></MyInput>
         </div>
 

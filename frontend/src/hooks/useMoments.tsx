@@ -1,8 +1,8 @@
 import {useMemo} from 'react'
-import {IMoment} from "../components/App/Moment/Moment";
+import {IMoment} from "../models/models";
 
 export const useSortedMoments = (moments: IMoment[], sort: string) => {
-    type OmitID = Omit<IMoment, "id"|"comments">;
+    type OmitID = Omit<IMoment, "id"|"comments"|"created_date"|"author"|"url"|"is_liked"|"is_mine"|"likes">;
     type SortKey = keyof OmitID;
     const sortedMoments = useMemo(() => {
         if (sort) {
@@ -17,7 +17,7 @@ export const useSortedMoments = (moments: IMoment[], sort: string) => {
 export const useMoments = (moments: IMoment[], sort: string, query:string) => {
     const sortedMoments = useSortedMoments(moments, sort);
     const sortedAndSearchedMoments = useMemo(()=> {
-        return sortedMoments.filter(post => post.title.toLowerCase().includes(query))
+        return sortedMoments?.filter(post => post.title.toLowerCase().includes(query.toLowerCase()))
     }, [query, sortedMoments])
     return sortedAndSearchedMoments;
 }

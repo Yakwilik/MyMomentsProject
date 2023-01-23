@@ -14,7 +14,7 @@ interface MomentFilterState {
 const MomentFilter :FC<MomentFilterState> = ({filter, setFilter, ...props}) =>{
 
     const options: OptionProps[] = [
-        {name: "по тексту", value:"text"},
+        {name: "по тексту", value:"content"},
         {name: "по названию", value:"title"}
     ]
 

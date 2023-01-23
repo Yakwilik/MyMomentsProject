@@ -1,0 +1,19 @@
+
+.comment-enter {
+    transform: translateX(-350px);
+    transition: all 500ms ease-in;
+}
+
+.comment-enter-active {
+    transform: translateX(0);
+    transition: all 500ms ease-in;
+}
+
+.comment-exit {
+    opacity: 1;
+}
+
+.comment-exit-active {
+    transform: translateX(350px);
+    transition: all 500ms ease-in;
+}

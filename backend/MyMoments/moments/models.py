@@ -82,6 +82,20 @@ class Moment(models.Model):
     def total_likes(self):
         return self.likes.count()
 
+    @property
+    def liked_users(self):
+        return get_fans(self)
+
+    @property
+    def is_liked(self, user):
+        if not user.is_authenticated:
+            return False
+        profile = self.objects.get(user=user)
+        obj_type = ContentType.objects.get_for_model(Moment)
+        likes = Like.objects.filter(
+            content_type=obj_type, object_id=self.id, liked_user=profile)
+        return likes.exists()
+
     def comments(self):
         return Comment.objects.filter(moment__id=self.id)
 
@@ -98,6 +112,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
+    objects = models.Manager()
     liked_user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()

@@ -39,6 +39,7 @@
         location / {
 #            uwsgi_pass  django;
             proxy_pass http://unix:/sock/django.sock;
+            proxy_set_header Host $host;
 #            include     uwsgi_params; # файл uwsgi_params, который мы только что взяли с github
         }
     }

@@ -1,18 +1,18 @@
 import React, {FC, useRef, useState} from 'react';
 import MyInput from "../../UI/input/MyInput";
 import MyButton from "../../UI/button/MyButton";
-import Moment, {IMoment} from "../Moment/Moment";
+import {IMoment} from "../../../models/models";
 
 interface NewMomentFormCallback {
     onSubmit: ((callback: IMoment) => void)
 }
 
 const NewMomentForm: FC<NewMomentFormCallback> = ({onSubmit}) => {
-    const [moment, setMoment] = useState<IMoment>({id:2, title: "", image: " ", text: "", comments:[]})
+    const [moment, setMoment] = useState<IMoment>({id:2, is_liked: false, title: "", image: " ", content: "", comments:[], author:{id:1, avatar: ""}})
     const bodyInputRef = useRef<HTMLInputElement>(null)
     const addNewMoment = (event: React.SyntheticEvent) => {
         event.preventDefault()
-        setMoment({id: moment.id + 1, text: " ", image: " ", title: " ", comments:[]})
+        setMoment({id: moment.id + 1, is_liked: false, content: " ", image: " ", title: " ", comments:[], author: {id:1, avatar:""}})
         const newMoment: IMoment = moment
         onSubmit(newMoment)
     }
@@ -26,8 +26,8 @@ const NewMomentForm: FC<NewMomentFormCallback> = ({onSubmit}) => {
                          placeholder={"название"}
                 />
                 <MyInput type={"textarea"}
-                         value={moment.text}
-                         onChange={event => setMoment({...moment, text: event.target.value})}
+                         value={moment.content}
+                         onChange={event => setMoment({...moment, content: event.target.value})}
                          placeholder={"текст"}
                 />
                 <MyButton onClick={addNewMoment}>подтвердить</MyButton>

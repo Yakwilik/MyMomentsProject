@@ -1,20 +1,15 @@
 import React, {FC} from 'react';
-import {IUser} from "../User/User";
 import classes from "./Comment.module.css"
+import {ICommentProps} from "../../../models/models";
 
-export interface ICommentProps {
-    author : IUser
-    text:string
-}
-
-const Comment: FC<ICommentProps> = ({text, author}) => {
+const Comment: FC<ICommentProps> = ({text, comment_author}) => {
 
     return (
     <div className={"w-[100%] pt-2"}>
         <div className={[" ", classes.CommentAuthor].join(" ")}>
-            {author.avatarImage? <img src={" "}/> : <span/>}
+            {comment_author.avatar? <img src={" "}/> : <span/>}
             <div>
-            {author.name && author.surname ? [author.name, author.surname].join(" ") : author.username}
+            {comment_author?.user?.first_name && comment_author.user?.last_name ? [comment_author?.user?.first_name, comment_author.user?.last_name].join(" ") : comment_author.user?.username}
                 <span className={["float-right", classes.Options].join(" ")}>...</span>
             </div>
         </div>

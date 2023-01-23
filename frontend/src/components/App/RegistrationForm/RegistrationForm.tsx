@@ -1,4 +1,4 @@
-import {IMoment} from "../Moment/Moment";
+import {IMoment} from "../../../models/models";
 import {RegistrationInputFormValues} from "../../../store/moments/dataTypes/registration";
 import React, {FC, useState} from "react";
 import CSRFToken from "../CSRFToken";

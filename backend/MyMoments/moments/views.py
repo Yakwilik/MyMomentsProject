@@ -58,15 +58,18 @@ class MomentViewSet(viewsets.ModelViewSet):
     queryset = Moment.objects.all()
     serializer_class = MomentSerializer
     permission_classes = [permissions.AllowAny]
-
     # moment
     # comment_author
+
     @action(methods=['get'], detail=True)
     def comments(self, request, pk=None):
         if pk is None:
             return Response({'comments': [c.text for c in Comment.objects.all()]})
         comms = Comment.objects.filter(moment__id=pk)
-        return Response({'comments': [{'text': c.text, 'author_id': c.comment_author.id, 'date': c.created_date} for c in comms]})
+        return Response({'comments': [{'text': c.text,
+                                       'author_id': c.comment_author.id,
+                                       'date': c.created_date,
+                                       'id': c.id} for c in comms]})
 
 
 class RateViewSet(viewsets.ModelViewSet):
