@@ -116,7 +116,7 @@ def login(request: HttpRequest):
 
 
 class MomentViewSet(viewsets.ModelViewSet):
-    queryset = Moment.objects.all()
+    queryset = Moment.objects.all().order_by('-created_date')
     serializer_class = MomentSerializer
     permission_classes = [permissions.BasePermission]
     # moment

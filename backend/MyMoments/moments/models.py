@@ -75,6 +75,9 @@ class Moment(models.Model):
 
     likes = GenericRelation('Like')
 
+    class Meta:
+        ordering = ['-created_date']
+
     def __str__(self):
         return f'{self.title} {self.content}'
 
