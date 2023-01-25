@@ -23,6 +23,7 @@ export const momentsApi = createApi({
                 method: "POST",
                 body: payload,
             }),
+            invalidatesTags: ['moments']
         }),
         signUp: build.mutation<any, FormData>({
             query: (payload:MyFormData) => ({
