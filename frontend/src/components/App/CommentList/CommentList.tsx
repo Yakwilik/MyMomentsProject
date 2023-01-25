@@ -1,4 +1,3 @@
-import {IMoment} from "../../../models/models";
 import Comment from "../Comment/Comment";
 import {ICommentProps} from "../../../models/models"
 import React from "react";

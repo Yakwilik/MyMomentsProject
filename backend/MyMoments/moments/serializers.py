@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
+from rest_framework import pagination
 
 from .models import Profile, Moment, Rate, Comment, Follower, Like
 

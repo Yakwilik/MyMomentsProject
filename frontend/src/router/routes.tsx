@@ -20,7 +20,20 @@ export const privateRoutes :routeProps[] = [
 ]
 
 export const routes :routeProps[] = [
+    {path: "/", component: Moments, key: 0},
+    {path: "/about", component: About, key: 2},
     {path: "/login", component: Login, key: 5},
-    {path: "signup", component: Registration, key:6}
+    {path: "/signup", component: Registration, key:6},
+    {path: "/error", component: Error, key: 3},
+
+]
+
+export const allRoutes :routeProps[] = [
+    {path: "/", component: Moments, key: 0},
+    {path: "/profile", component: Profile, key: 1},
+    {path: "/about", component: About, key: 2},
+    {path: "/error", component: Error, key: 3},
+    {path: "/login", component: Login, key: 5},
+    {path: "/signup", component: Registration, key:6},
 
 ]

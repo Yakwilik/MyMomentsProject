@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
-// import {useSignUpQuery} from "../store/moments/momentsApi";
-import CSRFToken from "../components/App/CSRFToken";
-import MyInput from "../components/UI/input/MyInput";
-import MyButton from "../components/UI/button/MyButton";
 import {RegistrationData, RegistrationInputFormValues} from "../store/moments/dataTypes/registration"
-import {useSignUpMutation} from "../store/moments/momentsApi";
 import axios from "axios";
 import RegistrationForm from "../components/App/RegistrationForm/RegistrationForm";
 
-const buttonStyle: string = "py-[5px] my-4 px-[15px] cursor-pointer bg-[teal] hover:bg-[lightgray] m-auto"
+// const buttonStyle: string = "py-[5px] my-4 px-[15px] cursor-pointer bg-[teal] hover:bg-[lightgray] m-auto"
 
 
 const Registration = () => {
@@ -21,6 +16,7 @@ const Registration = () => {
     const [visible, setVisible] = useState<string>('None')
     function signUp(values: RegistrationInputFormValues) {
         const data = RegistrationData(values)
+        console.log(data)
         async function fetchResult() {
             const response = await axios.post("http://localhost:8080/api/v1/signup/", data).catch(function (error) {
                 if (error.response) {
@@ -48,7 +44,7 @@ const Registration = () => {
     return (
         <div className={"pt-5 w-[50%] text-center"}>
             {/*{isError && <h2>ошибка</h2>}*/}
-            <h1>Страница для логина</h1>
+            <h1>Страница для регистрации</h1>
             <RegistrationForm onSubmit={signUp}/>
         </div>
     );

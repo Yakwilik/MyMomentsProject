@@ -1,4 +1,4 @@
-import React, {FC, ForwardedRef, InputHTMLAttributes, LegacyRef} from 'react';
+import React,  {LegacyRef} from 'react';
 import classes from './MyInput.module.css';
 
 type inpProps =  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>

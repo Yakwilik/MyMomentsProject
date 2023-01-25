@@ -1,4 +1,4 @@
-import {ICommentProps, IMoment} from "../../../models/models";
+import {IMoment} from "../../../models/models";
 import React, {useState} from "react";
 import MomentFilter, {MomentFilterProps} from "../MomentFilter/MomentFilter";
 import {useMoments} from "../../../hooks/useMoments";
@@ -18,7 +18,7 @@ const MomentsWithFilter = ({moments}:MomentsWithFilterProps) => {
     }
 
     return (
-        <div>
+        <div className={"flex items-center flex-col"}>
             <MomentFilter filter={filter} setFilter={setFilter}></MomentFilter>
             <MomentList onSubmit={deleteMoment} moments={sortedAndSearchedMoments}></MomentList>
         </div>

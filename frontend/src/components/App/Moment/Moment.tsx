@@ -4,7 +4,8 @@ import MyButton from "../../UI/button/MyButton";
 import {ICommentProps, IMoment} from "../../../models/models";
 import {CommentList} from "../CommentList/CommentList";
 import MyInput from "../../UI/input/MyInput";
-
+import {useLazyGetCsrfQuery, useLikeMutation} from "../../../store/moments/momentsApi";
+import {useAppSelector} from "../../../hooks/useAppSelector";
 
 interface IMomentElement {
     moment: IMoment
@@ -13,14 +14,15 @@ interface IMomentElement {
 }
 const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
     // const [comments] = useMemo();
+    const [like_moment, {isLoading}] = useLikeMutation()
+    const [getCsrf, {isLoading: isCsrfLoading}] = useLazyGetCsrfQuery()
     const [comments, setComments] = useState(moment.comments)
-    const [like, toggleLike] = useState(false)
+    const auth = useAppSelector(state => state.auth)
+    // const [like, toggleLike] = useState(false)
     function Like() {
-        if (like) {
-            toggleLike(false)
-        } else {
-            toggleLike(true)
-        }
+        if (!auth.authorized) return
+        getCsrf(false)
+        like_moment(moment.id)
     }
     function Comment( event: React.KeyboardEvent<HTMLInputElement>) {
         if (comments == null) {
@@ -41,6 +43,10 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
     }
     return (
         <div className={classes.momentWrapper}>
+            <div className={"mr-auto flex items-center"}>
+                <img alt={moment.author.user?.username} className={"inline-block w-[50px] h-[50px] rounded-full"} src={moment.author.avatar}/>
+                <p className={"ml-5"}>{moment.author.user?.username}</p>
+            </div>
             <picture onDoubleClick={Like}>
                 <source className={classes.imageSize}
                     srcSet={moment.image}
@@ -54,8 +60,11 @@ const Moment:FC<IMomentElement>= ({moment, onSubmit, ...props}) => {
             <div className={"ml-auto"}>
                 {moment.is_mine && <MyButton onClick={()=>{onSubmit!(moment)}}>Удалить</MyButton>}
             </div>
-            <div>
-                <span className={classes.liked_before} onClick={()=> console.log("click")}>
+            <div className={"align-bottom"}>
+                {moment.is_liked && <img alt={"redHeart"} onClick={Like} src="Favorite.png" className={[classes.like_picture, "inline", "cursor-pointer"].join(" ")}/>}
+                {!moment.is_liked && <img alt={"blackHeart"} onClick={Like} src="NotAssessed.png" className={[classes.like_picture, "inline cursor-pointer mr-[3px]"].join(" ")}/>}
+
+                <span className={["pt-[5px]"].join(" ")}>
                     {moment.likes}
                 </span>
             </div>

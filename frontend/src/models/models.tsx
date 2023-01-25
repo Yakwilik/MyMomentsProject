@@ -36,3 +36,15 @@ export interface PaginationResponse<T> {
     previous?: string;
     results: T[];
 }
+
+export interface PaginationProps {
+    count: number;
+    next?: string;
+    previous?: string;
+}
+
+export interface ResponseResult {
+    status: number;
+    message: string
+
+}

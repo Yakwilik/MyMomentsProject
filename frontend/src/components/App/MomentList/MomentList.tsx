@@ -1,7 +1,6 @@
-import React, {InputHTMLAttributes} from 'react';
+import React from 'react';
 import Moment from "../Moment/Moment";
 import  {IMoment} from "../../../models/models"
-import {CSSTransition, TransitionGroup} from 'react-transition-group'
 
 import './MomentList.css'
 
@@ -15,19 +14,19 @@ const MomentList = ({moments, onSubmit}: MomentListProps) => {
         return (<div className={"text-center font-bold m-auto"}>моменты не найдены</div>)
     }
     return (
-        <div className={"flex justify-center"}>
-            <TransitionGroup >
+        <div className={"flex justify-center flex-col"}>
+            {/*<TransitionGroup >*/}
                 {moments.map(moment =>
-                    <CSSTransition
-                        classNames={"moment"}
-                        timeout={500}
-                        key={moment.id}
-                    >
-                        <Moment onSubmit={onSubmit}  moment={moment}/>
-                    </CSSTransition>
+                    // <CSSTransition
+                    //     classNames={"moment"}
+                    //     timeout={500}
+                    //     key={moment.id}
+                    // >
+                        <Moment key={moment.id} onSubmit={onSubmit}  moment={moment}/>
+                    // </CSSTransition>
 
                 )}
-            </TransitionGroup>
+            {/*</TransitionGroup>*/}
 
         </div>
     );

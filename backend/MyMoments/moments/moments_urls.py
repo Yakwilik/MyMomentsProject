@@ -20,7 +20,11 @@ urlpatterns = [
     # path('login/', views.login, name="login"),
     # path('signup/<str:login>', views.registration, name="registration"),
     path('signup/', views.registration, name="registration"),
-    path('', include(router.urls), name="api")
+    path('login/', views.login, name="login"),
+    path('logout/', views.log_out, name="logout"),
+    path('add_moment/', views.add_moment, name="add_moment"),
+    path('', include(router.urls), name="api"),
+    path('get_csrf/', views.get_csrf)
     # path('settings/', views.settings, name="settings"),
     # path('hot/', views.hot, name="hot_question"),
     # path('tag/<str:tag>', views.tag_listing, name="tag"),

@@ -19,7 +19,7 @@
 
         # обслуживание медиа файлов и статики
         location /media  {
-            alias media;  # расположение медиафайлов (при необходимости измените)
+            root /etc/nginx/;  # расположение медиафайлов (при необходимости измените)
             add_header Access-Control-Allow-Origin '*';
             include       /etc/nginx/mime.types;
             default_type  application/octet-stream;

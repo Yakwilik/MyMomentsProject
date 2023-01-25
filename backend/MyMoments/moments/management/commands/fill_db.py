@@ -235,6 +235,6 @@ class Command(BaseCommand):
         self.create_moments(profiles)
         moments = Moment.objects.all()
         self.create_rates(profiles)
-        self.create_likes(profiles, moments)
+        # self.create_likes(profiles, moments)
         self.create_comments(profiles, moments)
         # self.create_followers(profiles)
